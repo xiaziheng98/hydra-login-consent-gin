@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <h2>
+        An application requests access to your data!
+    </h2>
+
+    <p>
+        Hi {{.User}}, application <span style="font-weight: bold">{{.ClientName}}</span> wants access resources on your behalf and to:
+    </p>
+    <form action="/consent" method="POST">
+        <input type="hidden" name="csrf_token" value="...." />
+        <input type="hidden" name="challenge" value="{{ .challenge }}" />
+        <ul>
+            {{range .RequestedScopes}}
+            <li><input type="checkbox" name="grant_scope" value="{{.}}" />{{.}}</li>
+            {{end}}
+        </ul>
+
+        <p>
+            Do you want to be asked next time when this application wants to access you data?
+            The application will not be able to ask for more permissions without your consent.
+        </p>
+        <input type="checkbox" name="remember" value="true" />
+        <label>Do not ask me again</label>
+        <select name="remember_for">
+            <option value="3">3 days</option>
+            <option value="7">7 days</option>
+            <option value="15">15 days</option>
+            <option value="30">30 days</option>
+        </select><br><br>
+
+        <input type="submit" name="is_consent" value="Allow access" />
+        <input type="submit" name="is_consent" value="Deny access" />
+    </form>
+</body>
+
+</html>

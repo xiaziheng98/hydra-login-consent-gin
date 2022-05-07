@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <h2>
+        Do you wish to log out?
+    </h2>
+
+    <form action="/logout" method="POST">
+        <input type="hidden" name="csrf_token" value="...." />
+        <input type="hidden" name="challenge" value="{{ .challenge }}" />
+
+        <input type="submit" name="is_logout" value="Yes" />
+        <input type="submit" name="is_logout" value="No" />
+    </form>
+</body>
+</html>
