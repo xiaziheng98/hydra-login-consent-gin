@@ -60,7 +60,7 @@ func HandleConsent(c *gin.Context) {
 func acceptConsentRequest(form HandleConsentForm) (redirectUrl string, err error) {
 
 	body := client.NewAcceptConsentRequest()
-	body.GrantScope = form.GrantScope
+	body.SetGrantScope(form.GrantScope)
 	if form.Remember {
 		body.SetRemember(true)
 		body.SetRememberFor(form.RememberFor * 86400) // second
@@ -108,18 +108,26 @@ func fillScopeClaims(scope []string) (accessTokenField map[string]interface{}, i
 
 	field := make(map[string]interface{})
 
+	address := make(map[string]interface{})
+	address["formatted"] = ""
+	address["street_address"] = ""
+	address["locality"] = ""
+	address["region"] = ""
+	address["postal_code"] = ""
+	address["country"] = ""
+
 	for _, i := range scope {
 		switch i {
 		case "email":
 			field["email"] = "foo@bar.com"
 			field["email_verified"] = true
 		case "address":
-			field["address"] = ""
+			field["address"] = address
 		case "phone":
 			field["phone_number"] = "0123456789"
 			field["phone_number_verified"] = true
 		case "profile":
-			//field["sub"] = "" Hydra will set sub
+			//field["sub"] = "" // Hydra will set sub
 			field["name"] = "Tom"
 			field["given_name"] = ""
 			field["family_name"] = ""
@@ -135,15 +143,6 @@ func fillScopeClaims(scope []string) (accessTokenField map[string]interface{}, i
 			field["birthdate"] = ""
 			field["phone_number"] = "0123456789"
 			field["phone_number_verified"] = true
-
-			address := make(map[string]interface{})
-			address["formatted"] = ""
-			address["street_address"] = ""
-			address["locality"] = ""
-			address["region"] = ""
-			address["postal_code"] = ""
-			address["country"] = ""
-
 			field["address"] = address
 			field["zoneinfo"] = ""
 			field["locale"] = ""
